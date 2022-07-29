@@ -28,7 +28,7 @@ function mainPrompt() {
         .then((answers) => {
             switch (answers.action) {
                 case "View all departments":
-                    // viewDepts();
+                    viewDepts();
                     break;
                 case "View all roles":
                     // viewRoles();
@@ -52,6 +52,14 @@ function mainPrompt() {
                     process.exit();
             }
           });
+}
+
+function viewDepts() {
+    db.query('SELECT * FROM department', function (err, results) {
+        console.log("\n");
+        console.table(results);
+        mainPrompt();
+    });
 }
 
 function init() {
