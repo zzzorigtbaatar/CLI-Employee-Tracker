@@ -37,7 +37,7 @@ function mainPrompt() {
                     viewEmployees();
                     break;
                 case "Add a department":
-                    // addDept();
+                    addDept();
                     break;
                 case "Add a role":
                     // addRole();
@@ -80,6 +80,28 @@ function viewEmployees() {
         mainPrompt();
     });
 }
+
+const deptAsk = [
+    {
+        type: 'input',
+        name: 'deptName',
+        message: "What is the name of the department:"
+    }
+]
+
+function addDept() {
+    inquirer
+    .prompt(deptAsk)
+    .then((answers) => {
+         db.query('INSERT INTO department (name) VALUES (?)', answers.deptName, function (err, results) {
+            if (err) throw err;
+        });
+        console.log("\n");
+        mainPrompt();
+      });
+}
+
+
 
 function init() {
     mainPrompt();
