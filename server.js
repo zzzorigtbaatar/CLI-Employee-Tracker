@@ -31,7 +31,7 @@ function mainPrompt() {
                     viewDepts();
                     break;
                 case "View all roles":
-                    // viewRoles();
+                    viewRoles();
                     break;
                 case "View all employees":
                     // viewEmployees();
@@ -57,6 +57,15 @@ function mainPrompt() {
 function viewDepts() {
     db.query('SELECT * FROM department', function (err, results) {
         console.log("\n");
+        console.table(results);
+        mainPrompt();
+    });
+}
+
+function viewRoles() {
+    db.query('SELECT role.id, role.title, department.name, role.salary FROM role INNER JOIN department ON department.id = role.department_id ORDER BY role.id ASC', function (err, results) {
+        console.log("\n");
+        console.log(err);
         console.table(results);
         mainPrompt();
     });
