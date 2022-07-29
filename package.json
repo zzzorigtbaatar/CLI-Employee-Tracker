@@ -1,0 +1,17 @@
+{
+    "name": "main",
+    "version": "1.0.0",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "mysql2": "^2.3.3",
+        "inquirer": "^8.2.4",
+        "console.table": "^0.10.0"
+    }
+}
