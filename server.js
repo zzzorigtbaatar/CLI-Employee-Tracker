@@ -62,8 +62,8 @@ function mainPrompt() {
 
 function viewDepts() {
     db.query('SELECT * FROM department', function (err, results) {
+        if (err) throw err;
         console.log("\n");
-        console.log(err);
         console.table(results);
         mainPrompt();
     });
@@ -71,8 +71,8 @@ function viewDepts() {
 
 function viewRoles() {
     db.query('SELECT role.id, role.title, department.name, role.salary FROM role INNER JOIN department ON department.id = role.department_id ORDER BY role.id ASC', function (err, results) {
+        if (err) throw err;
         console.log("\n");
-        console.log(err);
         console.table(results);
         mainPrompt();
     });
@@ -80,8 +80,8 @@ function viewRoles() {
 
 function viewEmployees() {
     db.query('SELECT emp.id, emp.first_name, emp.last_name, role.title, department.name AS department, role.salary, concat(man.first_name, " ", man.last_name) AS manager FROM employee emp JOIN role ON emp.role_id = role.id JOIN department ON role.department_id = department.id LEFT JOIN employee man ON man.id = emp.manager_id', function (err, results) {
+        if (err) throw err;
         console.log("\n");
-        console.log(err);
         console.table(results);
         mainPrompt();
     });
@@ -177,6 +177,7 @@ function addEmployee() {
             roleArray.push(item.title);
         }
     });
+    empArray.push('none')
     db.query('SELECT * FROM employee', function (err, results) {
         for (item of results) {
             let name = item.first_name + " " + item.last_name;
