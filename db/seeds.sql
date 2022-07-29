@@ -2,7 +2,7 @@ INSERT INTO department (name)
 VALUES ("Office"),
        ("Sales"),
        ("Marketing"),
-       ("Research & Development"),
+       ("Research & Development");
        
 
 INSERT INTO role (title, salary, department_id)
@@ -15,10 +15,10 @@ VALUES ("CEO", 250000, 1),
        ("Accountant", 80000, 1);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Guts", "Berserk", 2, 1),
-       ("Monkey", "Luffy", 1, null),
+VALUES ("Monkey", "Luffy", 1, null),
+       ("Guts", "Berserk", 2, 1),
        ("Naruto", "Uzumaki", 3, 2),
-       ("Edward", "Elric", 4, 1),
+       ("Edward", "Elric", 4, 2),
        ("Alphonse", "Elric", 5, 4),
-       ("Robin", "Nico", 6, 1),
-       ("Eugene", "Krabs", 7, 1);
+       ("Robin", "Nico", 6, 2),
+       ("Eugene", "Krabs", 7, 2);
