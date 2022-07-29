@@ -1,6 +1,8 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+const deptObj = {};
+const deptArray = [];
 
 // Connect to database
 const db = mysql.createConnection(
@@ -40,7 +42,7 @@ function mainPrompt() {
                     addDept();
                     break;
                 case "Add a role":
-                    // addRole();
+                    addRole();
                     break;
                 case "Add an employee":
                     // addEmployee();
@@ -81,6 +83,7 @@ function viewEmployees() {
     });
 }
 
+//adding department
 const deptAsk = [
     {
         type: 'input',
@@ -94,6 +97,45 @@ function addDept() {
     .prompt(deptAsk)
     .then((answers) => {
          db.query('INSERT INTO department (name) VALUES (?)', answers.deptName, function (err, results) {
+            if (err) throw err;
+        });
+        console.log("\n");
+        mainPrompt();
+      });
+}
+
+//adding role
+const roleAsk = [
+    {
+        type: 'input',
+        name: 'roleName',
+        message: "Enter new role name:"
+    },
+    {
+        type: 'input',
+        name: 'roleSalary',
+        message: "Enter salary:"
+    },
+    {
+        type: 'list',
+        name: 'roleDept',
+        message: "Select role dept:",
+        choices: deptArray
+    }
+]
+
+function addRole() {
+    db.query('SELECT * FROM department', function (err, results) {
+        for (item of results) {
+            deptObj[item.name] = item.id;
+            deptArray.push(item.name);
+        }
+        return 0;
+    });
+    inquirer
+    .prompt(roleAsk)
+    .then((answers) => {
+         db.query('INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)', [answers.roleName, answers.roleSalary, deptObj[answers.roleDept]], function (err, results) {
             if (err) throw err;
         });
         console.log("\n");
