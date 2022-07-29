@@ -3,6 +3,10 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 const deptObj = {};
 const deptArray = [];
+const roleObj = {};
+const roleArray = [];
+const empObj = {};
+const empArray = [];
 
 // Connect to database
 const db = mysql.createConnection(
@@ -45,7 +49,7 @@ function mainPrompt() {
                     addRole();
                     break;
                 case "Add an employee":
-                    // addEmployee();
+                    addEmployee();
                     break;
                 case "Update an employee role":
                     // updateEmployee();
@@ -91,7 +95,6 @@ const deptAsk = [
         message: "What is the name of the department:"
     }
 ]
-
 function addDept() {
     inquirer
     .prompt(deptAsk)
@@ -123,7 +126,6 @@ const roleAsk = [
         choices: deptArray
     }
 ]
-
 function addRole() {
     db.query('SELECT * FROM department', function (err, results) {
         for (item of results) {
@@ -143,6 +145,62 @@ function addRole() {
       });
 }
 
+//adding employee
+const employeeAsk = [
+    {
+        type: 'input',
+        name: 'firstName',
+        message: "Enter employee's first name:"
+    },
+    {
+        type: 'input',
+        name: 'lastName',
+        message: "Enter employee's last name:"
+    },
+    {
+        type: 'list',
+        name: 'role',
+        message: "Select employee's role:",
+        choices: roleArray
+    },
+    {
+        type: 'list',
+        name: 'manager',
+        message: "Select employee's manager:",
+        choices: empArray
+    }
+]
+function addEmployee() {
+    db.query('SELECT * FROM role', function (err, results) {
+        for (item of results) {
+            roleObj[item.title] = item.id;
+            roleArray.push(item.title);
+        }
+    });
+    db.query('SELECT * FROM employee', function (err, results) {
+        for (item of results) {
+            let name = item.first_name + " " + item.last_name;
+            empObj[name] = item.id;
+            empArray.push(name);
+        }
+    });
+    inquirer
+    .prompt(employeeAsk)
+    .then((answers) => {
+         let manager;
+         if (answers.manager != 'none') {
+            manager = answers.manager
+        }
+         else {
+            manager = null
+        }
+         db.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [answers.firstName, answers.lastName, roleObj[answers.role], empObj[manager]], function (err, results) {
+            if (err) throw err;
+        });
+        console.log("\n");
+        mainPrompt();
+      });
+}
 
 
 function init() {
